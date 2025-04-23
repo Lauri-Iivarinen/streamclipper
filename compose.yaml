@@ -1,0 +1,19 @@
+services:
+  poller:
+    build:
+      context: ./poller
+      dockerfile: ../Dockerfile
+    volumes:
+      - ./poller:/app
+    working_dir: /app
+    ports:
+      - "8001:5001"
+  clipper:
+    build:
+      context: ./clipper
+      dockerfile: ../Dockerfile
+    volumes:
+      - ./clipper:/app
+    working_dir: /app
+    ports:
+      - "8000:5000"
