@@ -1,14 +1,24 @@
-poll https://s110.ipcamlive.com/streams/6ed7ufd6o2zt0inmg/stream.m3u8
+# Backend #
+- keeps updated video rewady to be served
+- decides url for the poller
+- serves video to front
 
-read contents (stream_0000704_L2011.ts)
+# Front #
+- Fetch video from backend upon request
+- format it using ffmpeg
+- Allows downloading of said video
 
-poll  https://s110.ipcamlive.com/streams/6ed7ufd6o2zt0inmg/stream_0000704_L2011.ts
+# Poller #
+- Constantly fetches new video feed from webcam url
+- generates video from bytes (There was some issues pushing this stuff to backend raw, which would be more optimal)
+- pushes updated video to backend
 
-save mp4
+# TODO #
+- Error handling
+- Automatic new url fetching
 
-append to list
-
-delete from oldest
-
-
-change back to 2 server logic
+# run code #
+run this on root to launch docker container
+```
+docker compose up -d
+```

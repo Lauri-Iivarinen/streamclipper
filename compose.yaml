@@ -1,4 +1,14 @@
 services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    ports:
+      - "8002:5002"
+  
   poller:
     build:
       context: ./poller
@@ -8,12 +18,14 @@ services:
     working_dir: /app
     ports:
       - "8001:5001"
-  clipper:
+
+  frontend:
     build:
-      context: ./clipper
+      context: ./frontend
       dockerfile: ../Dockerfile
     volumes:
-      - ./clipper:/app
+      - ./frontend:/app
     working_dir: /app
     ports:
       - "8000:5000"
+    

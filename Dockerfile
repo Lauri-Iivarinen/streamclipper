@@ -7,8 +7,8 @@ WORKDIR /app
 RUN apt update && apt install -y python3 python3-pip ffmpeg
 
 # Copy and install Python requirements
-COPY requirements.txt ../requirements.txt
-RUN pip install --break-system-packages -r ../requirements.txt
+#COPY requirements.txt ../requirements.txt
+RUN pip install --break-system-packages flask requests
 
 
 # Stage 2: Copy app-specific code

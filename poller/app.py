@@ -1,25 +1,31 @@
 import requests
+import json
 import time
+import sys
 import re
-import datetime
-import threading
-from flask import Flask, render_template, Response
-import os
 from copy import deepcopy
 
-#app = Flask(__name__)
+url = "localhost"
+if len(sys.argv) > 1 and sys.argv[1] == "docker":
+    url = "backend"
 
-videos = {}
+videos: dict[str: bytearray] = {}
 video_order = []
 polling = False
 video_index = 0
 
 def get_stream_address():
-    res = requests.get(f"https://g0.ipcamlive.com/player/getcamerastreamstate.php?_=1734719940015&token=w1o6ryGjh%2BL1bBCqddHrQ3%2FPHPjS0x3IWQ2zhUx7X8E%3D&alias=streetkamera&targetdomain=g0.ipcamlive.com")
+    #
+    res = requests.get(f"https://g0.ipcamlive.com/player/getcamerastreamstate.php?_=1763815864005&token=50sZH1wbvMhgjSagulqZwIsvvv5ubW5h0NISgYm%2BzQ0%3D&alias=lastenrinne&targetdomain=g0.ipcamlive.com&viewerid=1356447989&bufferingpercent=0")
     body = res.json()
     server = re.findall("[0-9]+", body["details"]["address"])[0]
     id = body["details"]["streamid"]
     return server, id
+
+#print(get_stream_address())
+def generate(a):
+    for chunk in a:
+        yield chunk
 
 def poll_webcam():
     global videos
@@ -44,7 +50,7 @@ def poll_webcam():
             if s not in videos:
                 res = requests.get(f"https://s{server}.ipcamlive.com/streams/{id}/{s}")
                 if res.status_code == 200:
-                    print(f"{s} - {len(video_order)}:{len(videos.keys())}")
+                    #print(f"{s} - {len(video_order)}:{len(videos.keys())}")
                     videos[s] = res.content
                     video_order.append(s)
                     if len(video_order) > 20:
@@ -52,38 +58,29 @@ def poll_webcam():
                         video_order = video_order[1:]
                 else:
                     print("error")
+
+
+        video_copy = deepcopy(videos)
+        vids = []
+        vd = deepcopy(video_order)
+
+        vd.reverse()
+        if len(vd) > 15:
+            vd = vd[0:15]
+        vd.reverse()
+
+        for v in vd:
+            vids.append(video_copy[v])
+
+        #content_type='application/octet-stream'
+        try:
+            response = requests.post(f'http://{url}:5001/insertbuffer', data=generate(vids), headers={'content-type': 'application/octet-stream'})
+            print(response.content)
+        except:
+            print("Err sending")
+            
         time.sleep(1)
 
+if __name__ == '__main__':
+    poll_webcam()
 
-app = Flask(__name__)
-threading.Thread(target = poll_webcam).start()
-
-def generate(a):
-    for chunk in a:
-        yield chunk
-
-@app.route("/smoke")
-def get_smoke():
-    return "ok"
-
-@app.route("/getrecent")
-def get_recent():
-    global videos
-    global video_order
-
-    video_copy = deepcopy(videos)
-    vids = []
-    vd = deepcopy(video_order)
-
-    vd.reverse()
-    if len(vd) > 15:
-        vd = vd[0:15]
-    vd.reverse()
-
-    for v in vd:
-        vids.append(video_copy[v])
-
-    return Response(generate(vids), content_type='application/octet-stream')
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)

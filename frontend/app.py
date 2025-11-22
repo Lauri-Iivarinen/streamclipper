@@ -9,13 +9,13 @@ import sys
 
 url = "localhost"
 if len(sys.argv) > 1 and sys.argv[1] == "docker":
-    url = "poller"
+    url = "backend"
 
 app = Flask(__name__)
 
 @app.route("/save")
 def save_video():
-    res = requests.get(f"http://{url}:5001/getrecent")
+    res = requests.get(f"http://{url}:5001/getclip")
     status = "ERROR GENERATING VIDEO"
     if res.status_code == 200:
         bts = res.content
