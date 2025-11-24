@@ -3,7 +3,7 @@ import time
 import re
 import datetime
 import threading
-from flask import Flask, render_template, Response, send_from_directory
+from flask import Flask, render_template, Response, send_from_directory, make_response
 import os
 import sys
 
@@ -15,7 +15,6 @@ app = Flask(__name__)
 
 @app.route("/save")
 def save_video():
-    
     try:
         res = requests.get(f"http://backend:8002/getclip")
         status = "ERROR GENERATING VIDEO"
@@ -40,7 +39,12 @@ def save_video():
 @app.route('/videos/<path:filename>')
 def serve_video(filename):
     # Serve the video file from the /videos directory
-    return send_from_directory('videos', filename)
+    response = make_response(
+        send_from_directory("videos", filename, conditional=False)
+    )
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Accept-Ranges"] = "bytes"
+    return response
 
 @app.route("/")
 def index():
