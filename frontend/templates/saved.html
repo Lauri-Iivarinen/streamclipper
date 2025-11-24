@@ -43,6 +43,7 @@
             border-width: 2px;
             border-radius: 0;
             background-color: #81d7d5;
+            width: 40%
         }
         #saveButton:hover {
             cursor:pointer;
@@ -104,14 +105,19 @@
     </header>
     <h3 id="status" class="font">{{status}}</h3>
     <div class="center" id="playback">
-        <video class="videoplayer" height="450" width="auto" controls>
+        <video id="player" class="videoplayer" height="400" width="auto" controls>
             <source src="{{ url_for('serve_video', filename=video) }}" type="video/mp4">
         Your browser does not support the video tag.
         <!--  -->
         </video>
+        
     </div>
 
     <div class="saveContainer">
+        <a class="center" href="{{ url_for('serve_video', filename=video) }}" download style="text-color: black; text-decoration: none;">
+            <button class="font" id="saveButton">DOWNLOAD VIDEO</button>
+        </a>
+        <br/>
         <div class="center">
             <button id="saveButton" class="font" onclick="saveClip()">SAVE ANOTHER</button>
         </div>
@@ -126,6 +132,8 @@
     </div>
     
     <script>
+        const divider = window.innerWidth > 780 ? 2 : window.innerWidth > 650 ? 3 : 4
+        document.getElementById('player').height = window.innerHeight / divider
         const status = document.getElementById("status").innerHTML
         if (status !== "CLIP SAVED") document.getElementById("playback").style = "display: none;"
         const saveClip = () => {
