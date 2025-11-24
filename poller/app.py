@@ -74,7 +74,7 @@ def poll_webcam():
                 vids.append(video_copy[v])
 
             try:
-                response = requests.post(f'http://{url}:5001/insertbuffer', data=generate(vids), headers={'content-type': 'application/octet-stream'})
+                response = requests.post(f'http://{url}:8002/insertbuffer', data=generate(vids), headers={'content-type': 'application/octet-stream'})
             except:
                 print("Err sending")
         except:

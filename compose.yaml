@@ -7,7 +7,7 @@ services:
       - ./backend:/app
     working_dir: /app
     ports:
-      - "8002:5002"
+      - "8002:8002"
   
   poller:
     build:
@@ -17,7 +17,7 @@ services:
       - ./poller:/app
     working_dir: /app
     ports:
-      - "8001:5001"
+      - "8001:8001"
 
   frontend:
     build:
@@ -27,5 +27,5 @@ services:
       - ./frontend:/app
     working_dir: /app
     ports:
-      - "8000:5000"
+      - "8000:8000"
     
