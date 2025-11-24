@@ -46,6 +46,10 @@ def serve_video(filename):
     response.headers["Accept-Ranges"] = "bytes"
     return response
 
+@app.route("/about")
+def about_page():
+    return render_template('about.html')
+
 @app.route("/")
 def index():
     return render_template('index.html')

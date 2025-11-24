@@ -43,6 +43,7 @@
             border-width: 2px;
             border-radius: 0;
             background-color: #81d7d5;
+            width: 40%
         }
         #saveButton:hover {
             cursor:pointer;
@@ -100,34 +101,17 @@
         }
     </style>
     <header class="header">
-        <h2 id="title" class="font">TALMACLIPPER</h2>
+        <h2 onclick="window.location.href = '/'" id="title" class="font">TALMACLIPPER</h2>
     </header>
-    
-    <div class="saveContainer">
-        <div class="center">
-            <button id="saveButton" class="font" onclick="saveClip()">SAVE CLIP</button>
-        </div>
-        <div id="processing">
-            <div class="center" >
-                <p id="loadingText" class="font">PROCESSING VIDEO</p>
-            </div>
-            <div class="center">
-                <div class="loader"></div>
-            </div>
-        </div>
-        <br/>
-        <div class="center">
-        <a href="/about">about</a>
-        </div>
+    <div>
+        <p>DISCLAIMERS:</p>
+        <li>- This is a proof of concept, and is not guaranteed to work 24/7</li>
+        <li>- It's running on a 70€ server and will be slow</li>
+        <li>- This is not illegal :D, Talma has the webcam url on their website</li>
+        <li>- Don't expect this to be up in a week</li>
+
+        <p>BR. Lauri</p>
     </div>
     
-    <script>
-        const saveClip = () => {
-            // document.getElementById("loadingText").style = "display: block;"
-            document.getElementById("saveButton").style = "display: none;"
-            document.getElementById("processing").style = "display: block;"
-            window.location.href = "/save"
-        }
-    </script>
 </body>
 </html>
