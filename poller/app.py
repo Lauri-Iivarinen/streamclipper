@@ -15,11 +15,15 @@ polling = False
 video_index = 0
 
 def get_stream_address():
-    res = requests.get(f"https://g0.ipcamlive.com/player/getcamerastreamstate.php?_=1763815864005&token=50sZH1wbvMhgjSagulqZwIsvvv5ubW5h0NISgYm%2BzQ0%3D&alias=lastenrinne&targetdomain=g0.ipcamlive.com&viewerid=1356447989&bufferingpercent=0")
-    body = res.json()
-    server = re.findall("[0-9]+", body["details"]["address"])[0]
-    id = body["details"]["streamid"]
-    return server, id
+    try:
+        res = requests.get(f"https://g0.ipcamlive.com/player/getcamerastreamstate.php?_=1763815864005&token=50sZH1wbvMhgjSagulqZwIsvvv5ubW5h0NISgYm%2BzQ0%3D&alias=lastenrinne&targetdomain=g0.ipcamlive.com&viewerid=1356447989&bufferingpercent=0")
+        body = res.json()
+        server = re.findall("[0-9]+", body["details"]["address"])[0]
+        id = body["details"]["streamid"]
+        return server, id
+    except:
+        print('err')
+    return '', ''
 
 #print(get_stream_address())
 def generate(a):
@@ -38,7 +42,6 @@ def poll_webcam():
 
 
     while True:
-        print(len(videos.keys()))
         try:
             count = count + 1
             res = requests.get(f"https://s{server}.ipcamlive.com/streams/{id}/stream.m3u8")
@@ -59,7 +62,6 @@ def poll_webcam():
                             video_order = video_order[1:]
                     else:
                         print("error polling segment of video")
-
 
             video_copy = deepcopy(videos)
             vids = []

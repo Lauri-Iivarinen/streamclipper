@@ -42,7 +42,7 @@ def serve_video(filename):
     response = make_response(
         send_from_directory("videos", filename, conditional=False)
     )
-    response.headers["Cache-Control"] = "no-store"
+    response.headers["Cache-Control"] = "no-store" # This should help with delivering video from file to browser
     response.headers["Accept-Ranges"] = "bytes"
     return response
 
